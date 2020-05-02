@@ -2,6 +2,7 @@ package com.saxena.vaibhav.mobileappws.rest.controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("users")
 public class UserRestController {
 
-	@GetMapping
-	public String getUser() {
-		return "Get user was called";
+	@GetMapping(path = "/{id}")
+	public String getUser(@PathVariable String id) {
+		return "Get user was called with ID: " + id;
 	}
 	
 	@PostMapping
