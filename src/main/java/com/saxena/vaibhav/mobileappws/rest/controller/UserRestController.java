@@ -1,6 +1,8 @@
 package com.saxena.vaibhav.mobileappws.rest.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,13 +25,13 @@ public class UserRestController {
 	}
 	
 	@GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-	public User getUser(@PathVariable String id) {
+	public ResponseEntity<User> getUser(@PathVariable String id) {
 		User user = new User();
 		user.setEmail("vaibhav@saxena.com");
 		user.setFirstName("Vaibhav");
 		user.setLastName("Saxena");
 		user.setId("1");
-		return user;
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
 	@PostMapping
