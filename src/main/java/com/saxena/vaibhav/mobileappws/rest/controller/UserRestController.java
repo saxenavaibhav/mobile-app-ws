@@ -1,5 +1,6 @@
 package com.saxena.vaibhav.mobileappws.rest.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,18 +10,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.saxena.vaibhav.mobileappws.rest.model.response.User;
+
 @RestController
 @RequestMapping("users")
 public class UserRestController {
 
 	@GetMapping
-	public String getUsers(@RequestParam (value = "page") String page, @RequestParam (value = "limit") String limit) {
+	public String getUsers(@RequestParam (value = "page", defaultValue = "1") String page, 
+						   @RequestParam (value = "limit",defaultValue = "50") String limit) {
 		return "Get users was called with page: " + page + " and limit: " + limit;
 	}
 	
-	@GetMapping(path = "/{id}")
-	public String getUser(@PathVariable String id) {
-		return "Get user was called with ID: " + id;
+	@GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	public User getUser(@PathVariable String id) {
+		User user = new User();
+		user.setEmail("vaibhav@saxena.com");
+		user.setFirstName("Vaibhav");
+		user.setLastName("Saxena");
+		user.setId("1");
+		return user;
 	}
 	
 	@PostMapping
