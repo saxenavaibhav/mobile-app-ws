@@ -6,12 +6,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("users")
 public class UserRestController {
 
+	@GetMapping
+	public String getUsers(@RequestParam (value = "page") String page, @RequestParam (value = "limit") String limit) {
+		return "Get users was called with page: " + page + " and limit: " + limit;
+	}
+	
 	@GetMapping(path = "/{id}")
 	public String getUser(@PathVariable String id) {
 		return "Get user was called with ID: " + id;
