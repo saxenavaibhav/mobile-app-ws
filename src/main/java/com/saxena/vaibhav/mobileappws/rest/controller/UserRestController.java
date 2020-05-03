@@ -1,5 +1,9 @@
 package com.saxena.vaibhav.mobileappws.rest.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -22,51 +26,47 @@ import com.saxena.vaibhav.mobileappws.rest.model.response.User;
 @RequestMapping("users")
 public class UserRestController {
 
+	private Map<String, User> users;
+
 	@GetMapping
-	public String getUsers(@RequestParam (value = "page", defaultValue = "1") String page, 
-						   @RequestParam (value = "limit",defaultValue = "50") String limit) {
+	public String getUsers(@RequestParam(value = "page", defaultValue = "1") String page,
+			@RequestParam(value = "limit", defaultValue = "50") String limit) {
 		return "Get users was called with page: " + page + " and limit: " + limit;
 	}
-	
-	@GetMapping(path = "/{id}", produces = 
-									{ MediaType.APPLICATION_XML_VALUE, 
-									  MediaType.APPLICATION_JSON_VALUE
-									}
-	            )
+
+	@GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<User> getUser(@PathVariable String id) {
-		User user = new User();
-		user.setEmail("vaibhav@saxena.com");
-		user.setFirstName("Vaibhav");
-		user.setLastName("Saxena");
-		user.setId("1");
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+		if (users.containsKey(id)) {
+			return new ResponseEntity<User>(users.get(id), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
+		}
 	}
-	
-	@PostMapping(consumes = {
-				MediaType.APPLICATION_JSON_VALUE,
-				MediaType.APPLICATION_XML_VALUE
-			},
-			produces = {
-					MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE
-			})
-	public User createUser(@Valid @RequestBody UserDetails userDetail) {
+
+	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<User> createUser(@Valid @RequestBody UserDetails userDetail) {
 		User user = new User();
 		user.setEmail(userDetail.getEmail());
 		user.setFirstName(userDetail.getFirstName());
 		user.setLastName(userDetail.getLastName());
-		return user;
+		String userId = UUID.randomUUID().toString();
+		user.setId(userId);
+		if (users == null) {
+			users = new HashMap<>();
+		}
+		users.put(userId, user);
+		return new ResponseEntity<User>(user, HttpStatus.CREATED);
 	}
-	
+
 	@PutMapping
 	public String updateUser() {
 		return "Update user was called";
 	}
-	
+
 	@DeleteMapping
 	public String deleteUser() {
 		return "Delete user was called";
 	}
-	
-	
+
 }
