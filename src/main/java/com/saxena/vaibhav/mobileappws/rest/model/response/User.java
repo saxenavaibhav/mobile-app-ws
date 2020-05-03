@@ -1,7 +1,5 @@
 package com.saxena.vaibhav.mobileappws.rest.model.response;
 
-import lombok.Data;
-
 public class User {
 
 	private String firstName;

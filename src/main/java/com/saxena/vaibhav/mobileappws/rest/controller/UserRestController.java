@@ -1,11 +1,10 @@
 package com.saxena.vaibhav.mobileappws.rest.controller;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.saxena.vaibhav.mobileappws.rest.model.request.UpdateUserDetails;
 import com.saxena.vaibhav.mobileappws.rest.model.request.UserDetails;
 import com.saxena.vaibhav.mobileappws.rest.model.response.User;
+import com.saxena.vaibhav.mobileappws.service.UserService;
 
 @RestController
 @RequestMapping("users")
 public class UserRestController {
 
 	private Map<String, User> users;
+	
+	@Autowired
+	private UserService userService;
 
 	@GetMapping
 	public String getUsers(@RequestParam(value = "page", defaultValue = "1") String page,
@@ -47,17 +50,8 @@ public class UserRestController {
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<User> createUser(@Valid @RequestBody UserDetails userDetail) {
-		User user = new User();
-		user.setEmail(userDetail.getEmail());
-		user.setFirstName(userDetail.getFirstName());
-		user.setLastName(userDetail.getLastName());
-		String userId = UUID.randomUUID().toString();
-		user.setId(userId);
-		if (users == null) {
-			users = new HashMap<>();
-		}
-		users.put(userId, user);
-		return new ResponseEntity<User>(user, HttpStatus.CREATED);
+		
+		return new ResponseEntity<User>(userService.createUser(userDetail), HttpStatus.CREATED);
 	}
 
 	@PutMapping(path = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = {
