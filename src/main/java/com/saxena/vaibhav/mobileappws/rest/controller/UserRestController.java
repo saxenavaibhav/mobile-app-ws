@@ -70,9 +70,10 @@ public class UserRestController {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
-	@DeleteMapping
-	public String deleteUser() {
-		return "Delete user was called";
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+		users.remove(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }
