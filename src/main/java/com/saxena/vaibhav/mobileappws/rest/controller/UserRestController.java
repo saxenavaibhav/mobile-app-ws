@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.saxena.vaibhav.mobileappws.rest.model.request.UserDetails;
 import com.saxena.vaibhav.mobileappws.rest.model.response.User;
 
 @RestController
@@ -24,7 +26,11 @@ public class UserRestController {
 		return "Get users was called with page: " + page + " and limit: " + limit;
 	}
 	
-	@GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	@GetMapping(path = "/{id}", produces = 
+									{ MediaType.APPLICATION_XML_VALUE, 
+									  MediaType.APPLICATION_JSON_VALUE
+									}
+	            )
 	public ResponseEntity<User> getUser(@PathVariable String id) {
 		User user = new User();
 		user.setEmail("vaibhav@saxena.com");
@@ -34,9 +40,20 @@ public class UserRestController {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
-	@PostMapping
-	public String createUser() {
-		return "Create user was called";
+	@PostMapping(consumes = {
+				MediaType.APPLICATION_JSON_VALUE,
+				MediaType.APPLICATION_XML_VALUE
+			},
+			produces = {
+					MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE
+			})
+	public User createUser(@RequestBody UserDetails userDetail) {
+		User user = new User();
+		user.setEmail(userDetail.getEmail());
+		user.setFirstName(userDetail.getFirstName());
+		user.setLastName(userDetail.getLastName());
+		return user;
 	}
 	
 	@PutMapping
