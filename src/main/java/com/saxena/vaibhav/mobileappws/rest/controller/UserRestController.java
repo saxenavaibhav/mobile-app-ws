@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.saxena.vaibhav.mobileappws.rest.model.request.UpdateUserDetails;
 import com.saxena.vaibhav.mobileappws.rest.model.request.UserDetails;
 import com.saxena.vaibhav.mobileappws.rest.model.response.User;
 
@@ -59,9 +60,14 @@ public class UserRestController {
 		return new ResponseEntity<User>(user, HttpStatus.CREATED);
 	}
 
-	@PutMapping
-	public String updateUser() {
-		return "Update user was called";
+	@PutMapping(path = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<User> updateUser(@PathVariable String id, @Valid @RequestBody UpdateUserDetails updateUserDetils) {
+		User user = users.get(id);
+		user.setFirstName(updateUserDetils.getFirstName());
+		user.setLastName(updateUserDetils.getLastName());
+		users.put(id, user);
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
 	@DeleteMapping
