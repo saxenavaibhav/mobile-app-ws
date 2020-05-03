@@ -1,5 +1,7 @@
 package com.saxena.vaibhav.mobileappws.rest.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +50,7 @@ public class UserRestController {
 					MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE
 			})
-	public User createUser(@RequestBody UserDetails userDetail) {
+	public User createUser(@Valid @RequestBody UserDetails userDetail) {
 		User user = new User();
 		user.setEmail(userDetail.getEmail());
 		user.setFirstName(userDetail.getFirstName());
